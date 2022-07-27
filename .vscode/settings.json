@@ -1,0 +1,17 @@
+{
+  "cSpell.words": ["gacha", "Genshin", "graia", "minigg", "saya", "tomlkit"],
+  "python.formatting.provider": "black",
+  "python.analysis.completeFunctionParens": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "editor.fontLigatures": false,
+  "python.linting.flake8Enabled": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "jupyter.jupyterServerType": "local",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  }
+}
