@@ -7,6 +7,13 @@
             "request": "launch",
             "module": "agenshindot",
             "justMyCode": false
+        },
+        {
+          "name": "Python: bot.py",
+          "type": "python",
+          "request": "launch",
+          "module": "bot.py",
+          "justMyCode": false
         }
     ]
 }
