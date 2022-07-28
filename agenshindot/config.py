@@ -19,6 +19,9 @@ class Config(BaseModel):
     """QQ 号"""
     verify_key: str
     """鉴权密钥"""
+    enable_console: bool = True
+    """是否启用控制台"""
+
     ws: Optional[WebsocketClientConfig] = None
     """正向 WebSocket"""
     ws_reverse: Optional[WebsocketServerConfig] = None

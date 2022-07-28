@@ -1,5 +1,17 @@
 {
-  "cSpell.words": ["gacha", "Genshin", "graia", "minigg", "saya", "tomlkit"],
+  "cSpell.words": [
+    "Behaviour",
+    "behaviours",
+    "creart",
+    "gacha",
+    "Genshin",
+    "graia",
+    "loguru",
+    "minigg",
+    "saya",
+    "Shutdowned",
+    "tomlkit"
+  ],
   "python.formatting.provider": "black",
   "python.analysis.completeFunctionParens": true,
   "python.analysis.diagnosticMode": "workspace",

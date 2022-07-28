@@ -27,6 +27,8 @@ poetry install --no-dev
 account = 1185285105
 # verifyKey
 verify_key = "agenshindot"
+# 是否启用控制台
+enable_console = true
 
 # 以下为连接配置
 # 如果不配置则默认为 HTTP + 正向 WebSocket，连接地址为 localhost:8080
@@ -79,3 +81,19 @@ python bot.py
 ```bash
 python -m agenshindot
 ```
+
+## 控制台命令
+
+在启用控制台后，可以输入以下命令执行一些操作
+
+* `/stop`
+
+  关闭 AGenshinDot.
+
+* `/license`
+
+  输出许可证信息.
+
+* `/version`
+
+  输出 AGenshinDot LOGO 和版本信息.
