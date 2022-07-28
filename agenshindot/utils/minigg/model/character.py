@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import Field, HttpUrl, BaseModel
 
 from . import BaseInfo, FandomUrl
@@ -11,17 +13,17 @@ class CV(BaseModel):
 
 
 class Image(BaseModel):
-    card: HttpUrl
-    portrait: HttpUrl
+    card: Optional[HttpUrl] = None
+    portrait: Optional[HttpUrl] = None
     icon: HttpUrl
     side_icon: HttpUrl = Field(..., alias="sideicon")
-    cover1: HttpUrl
-    cover2: HttpUrl
-    hoyolab_avatar: HttpUrl = Field(..., alias="hoyolab-avatar")
+    cover1: Optional[HttpUrl] = None
+    cover2: Optional[HttpUrl] = None
+    hoyolab_avatar: Optional[HttpUrl] = Field(None, alias="hoyolab-avatar")
     name_icon: str = Field(..., alias="nameicon")
     name_icon_card: str = Field(..., alias="nameiconcard")
-    name_gacha_splash: str = Field(..., alias="namegachasplash")
-    name_gacha_slice: str = Field(..., alias="namegachaslice")
+    name_gacha_splash: Optional[str] = Field(None, alias="namegachasplash")
+    name_gacha_slice: Optional[str] = Field(None, alias="namegachaslice")
     name_side_icon: str = Field(..., alias="namesideicon")
 
 
