@@ -1,17 +1,27 @@
 from pathlib import Path
-from typing import Optional
 from sys import exit as exit_
+from datetime import timedelta
 from traceback import print_exc
+from typing import Literal, Optional
 
 from tomlkit import load
 from tomlkit.exceptions import UnexpectedCharError
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import Field, BaseModel, ValidationError, validator
 from graia.ariadne.connection.config import (
     HttpClientConfig,
     HttpServerConfig,
     WebsocketClientConfig,
     WebsocketServerConfig,
 )
+
+
+class LogConfig(BaseModel):
+    expire_time: timedelta = timedelta(weeks=2)
+    """日志过期时间，过期即为删除"""
+    level: Literal[
+        "TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"
+    ] = "INFO"
+    """日志等级"""
 
 
 class Config(BaseModel):
@@ -21,6 +31,8 @@ class Config(BaseModel):
     """鉴权密钥"""
     enable_console: bool = True
     """是否启用控制台"""
+    log: LogConfig = Field(default_factory=LogConfig)
+    """日志配置"""
 
     ws: Optional[WebsocketClientConfig] = None
     """正向 WebSocket"""

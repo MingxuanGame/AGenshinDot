@@ -28,7 +28,16 @@ account = 1185285105
 # verifyKey
 verify_key = "agenshindot"
 # 是否启用控制台
-enable_console = true
+enable_console = false
+
+# 日志配置
+[log]
+# 日志等级，详情请看 loguru 文档
+level = "WARNING"
+# 过期时间，过期的日志将被删除，格式请看 
+# https://pydantic-docs.helpmanual.io/usage/types/#datetime-types
+# 中 `timedelta` 部分
+expire_time = 120
 
 # 以下为连接配置
 # 如果不配置则默认为 HTTP + 正向 WebSocket，连接地址为 localhost:8080
@@ -40,7 +49,6 @@ ws = "ws://localhost:8080"
 # ws = ["ws://localhost:8080"]
 
 # HTTP 配置
-# 正向 WebSocket 配置
 http = "http://localhost:8080"
 # 等同于如下配置
 # http = ["http://localhost:8080"]
@@ -70,19 +78,24 @@ headers = {}
 
 ## 启动
 
-1. 执行本项目文件夹下的 `bot.py`
+1.执行本项目文件夹下的 `bot.py`
 
 ```bash
 python bot.py
 ```
 
-2. 以模块形式启动
+2.以模块形式启动
 
 ```bash
 python -m agenshindot
 ```
 
 ## 控制台命令
+
+> WARNING
+> 控制台属于实验性内容，不建议使用
+>
+>启用控制台后，会禁用标准输出中 **日志等级** 的设置
 
 在启用控制台后，可以输入以下命令执行一些操作
 

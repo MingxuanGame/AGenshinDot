@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import time
 from pkgutil import iter_modules
 
 from creart import create
@@ -19,6 +20,7 @@ ags_config = load_config()
 ags_config_dict = load_config().dict(exclude_none=True)
 ags_config_dict.pop("account")
 ags_config_dict.pop("enable_console")
+ags_config_dict.pop("log")
 ags_config_dict.pop("verify_key")
 
 bcc = create(Broadcast)
@@ -28,6 +30,21 @@ app = Ariadne(
         ags_config.account, ags_config.verify_key, *ags_config_dict.values()
     ),
 )
+
+level = ags_config.log.level
+logger.add(
+    Path("log") / "{time:YYYY-MM-DD}" / "info.log",
+    level=level,
+    rotation=time(),
+    retention=ags_config.log.expire_time,
+)
+logger.add(
+    Path("log") / "{time:YYYY-MM-DD}" / "error.log",
+    level="ERROR",
+    rotation=time(),
+    retention=ags_config.log.expire_time,
+)
+
 if ags_config.enable_console:
     con = Console(
         broadcast=bcc,
@@ -40,6 +57,11 @@ if ags_config.enable_console:
         ),
     )
     saya.install_behaviours(ConsoleBehaviour(con))
+else:
+    from sys import stdout
+
+    logger.remove(0)
+    logger.add(stdout, level=level)
 
 
 with saya.module_context():
