@@ -1,5 +1,7 @@
 {
   "cSpell.words": [
+    "agenshindot",
+    "aiosqlite",
     "Behaviour",
     "behaviours",
     "creart",
@@ -8,8 +10,11 @@
     "graia",
     "loguru",
     "minigg",
+    "richuru",
     "saya",
     "Shutdowned",
+    "sqlalchemy",
+    "timedelta",
     "tomlkit"
   ],
   "python.formatting.provider": "black",

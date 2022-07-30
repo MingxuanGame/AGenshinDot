@@ -1,8 +1,8 @@
 from pathlib import Path
+from typing import Optional
 from sys import exit as exit_
 from datetime import timedelta
 from traceback import print_exc
-from typing import Literal, Optional
 
 from tomlkit import load
 from tomlkit.exceptions import UnexpectedCharError
@@ -14,14 +14,16 @@ from graia.ariadne.connection.config import (
     WebsocketServerConfig,
 )
 
+from .typing import LogLevel
+
 
 class LogConfig(BaseModel):
     expire_time: timedelta = timedelta(weeks=2)
-    """日志过期时间，过期即为删除"""
-    level: Literal[
-        "TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"
-    ] = "INFO"
+    """日志过期时间，过期即删除"""
+    level: LogLevel = "INFO"
     """日志等级"""
+    db_log: bool = False
+    """数据库日志"""
 
 
 class Config(BaseModel):
@@ -33,6 +35,8 @@ class Config(BaseModel):
     """是否启用控制台"""
     log: LogConfig = Field(default_factory=LogConfig)
     """日志配置"""
+    db_url: str = "sqlite+aiosqlite:///agenshindot.db"
+    """数据库 URL"""
 
     ws: Optional[WebsocketClientConfig] = None
     """正向 WebSocket"""

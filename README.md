@@ -30,15 +30,6 @@ verify_key = "agenshindot"
 # 是否启用控制台
 enable_console = false
 
-# 日志配置
-[log]
-# 日志等级，详情请看 loguru 文档
-level = "WARNING"
-# 过期时间，过期的日志将被删除，格式请看 
-# https://pydantic-docs.helpmanual.io/usage/types/#datetime-types
-# 中 `timedelta` 部分
-expire_time = 120
-
 # 以下为连接配置
 # 如果不配置则默认为 HTTP + 正向 WebSocket，连接地址为 localhost:8080
 # 可以同时配置多种连接
@@ -74,6 +65,17 @@ headers = {}
 # WARNING 上面的配置要保证不能缺失，也不能调换位置
 # 如果只需要设置 Endpoint，也可以使用下方的配置
 # webhook = "/"
+
+# 日志配置
+[log]
+# 日志等级，详情请看 loguru 文档
+level = "INFO"
+# 过期时间，过期的日志将被删除，格式请看 
+# https://pydantic-docs.helpmanual.io/usage/types/#datetime-types
+# 中 `timedelta` 部分
+expire_time = P14DT0H0M0S
+# 是否启用数据库日志
+db_log = false
 ```
 
 ## 启动
@@ -110,3 +112,7 @@ python -m agenshindot
 * `/version`
 
   输出 AGenshinDot LOGO 和版本信息.
+
+* `/execute <SQL 语句>`
+
+  执行 SQL 语句 **（危险操作）**

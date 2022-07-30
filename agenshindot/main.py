@@ -1,5 +1,4 @@
 from pathlib import Path
-from datetime import time
 from pkgutil import iter_modules
 
 from creart import create
@@ -11,8 +10,12 @@ from prompt_toolkit.styles import Style
 from graia.ariadne.console import Console
 from prompt_toolkit.formatted_text import HTML
 from graia.ariadne.connection.config import config
+from graia.ariadne.message.commander import Commander
 from graia.ariadne.console.saya import ConsoleBehaviour
+from graia.ariadne.message.commander.saya import CommanderBehaviour
 
+from .database import init_db
+from .log import patch_logger
 from .config import load_config
 from .version import __version__
 
@@ -22,27 +25,22 @@ ags_config_dict.pop("account")
 ags_config_dict.pop("enable_console")
 ags_config_dict.pop("log")
 ags_config_dict.pop("verify_key")
+ags_config_dict.pop("db_url")
 
 bcc = create(Broadcast)
+cmd = create(Commander)
 saya = create(Saya)
 app = Ariadne(
     connection=config(
         ags_config.account, ags_config.verify_key, *ags_config_dict.values()
     ),
 )
+saya.install_behaviours(CommanderBehaviour(cmd))
 
-level = ags_config.log.level
-logger.add(
-    Path("log") / "{time:YYYY-MM-DD}" / "info.log",
-    level=level,
-    rotation=time(),
-    retention=ags_config.log.expire_time,
-)
-logger.add(
-    Path("log") / "{time:YYYY-MM-DD}" / "error.log",
-    level="ERROR",
-    rotation=time(),
-    retention=ags_config.log.expire_time,
+patch_logger(
+    ags_config.log.level,
+    ags_config.log.expire_time,
+    not ags_config.enable_console,
 )
 
 if ags_config.enable_console:
@@ -57,11 +55,6 @@ if ags_config.enable_console:
         ),
     )
     saya.install_behaviours(ConsoleBehaviour(con))
-else:
-    from sys import stdout
-
-    logger.remove(0)
-    logger.add(stdout, level=level)
 
 
 with saya.module_context():
@@ -87,6 +80,7 @@ def main():
     logger.opt(colors=True).info(
         "AGenshinDot: <blue>https://github.com/MingxuanGame/AGenshinDot</blue>"
     )
+    init_db(ags_config.db_url, ags_config.log.db_log)
     try:
         app.launch_blocking()
     except KeyboardInterrupt:

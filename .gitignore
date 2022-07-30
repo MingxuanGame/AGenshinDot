@@ -664,3 +664,4 @@ FodyWeavers.xsd
 
 ### AGenshinDot Config ###
 config.toml
+agenshindot.db
