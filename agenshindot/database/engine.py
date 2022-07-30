@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from asyncio import Semaphore
-from typing import Any, TypeVar, Optional
+from typing import Any, TypeVar, Iterable, Optional
 
 from loguru import logger
-from sqlalchemy import delete, insert, update
 from sqlalchemy.engine.cursor import CursorResult
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import delete, insert, select, update, inspect
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 Base = declarative_base()
@@ -49,19 +49,42 @@ class Database:
 
     async def update(
         self, table: type[TBase], *condition, **data: Any
-    ) -> CursorResult:
-        return await self.execute(
-            update(table).where(*condition).values(**data)
-        )
+    ) -> None:
+        await self.execute(update(table).where(*condition).values(**data))
 
     async def select(
         self, table: type[TBase], primary_key: int, **kwargs: Any
     ) -> Optional[TBase]:
         return await self.session.get(table, primary_key, **kwargs)
 
+    async def fetch(self, table: type[TBase], *condition) -> Iterable[TBase]:
+        return (await self.execute(select(table).where(*condition))).scalars()
+
     async def close(self) -> None:
         await self.session.close()
         await self.engine.dispose()
+
+    # Complex API
+
+    async def insert_or_update(
+        self, table: type[TBase], primary_key: int, **data: Any
+    ) -> bool:
+        if await self.select(table, primary_key):
+            await self.update(
+                table, inspect(table).primary_key[0] == primary_key, **data
+            )
+            return False
+        else:
+            await self.insert(table, **data)
+            return True
+
+    async def insert_or_ignore(
+        self, table: type[TBase], primary_key: int, **data: Any
+    ) -> bool:
+        if not (await self.select(table, primary_key)):
+            await self.insert(table, **data)
+            return True
+        return False
 
 
 db: Optional[Database] = None

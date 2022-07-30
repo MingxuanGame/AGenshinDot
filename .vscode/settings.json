@@ -2,6 +2,7 @@
   "cSpell.words": [
     "agenshindot",
     "aiosqlite",
+    "backref",
     "Behaviour",
     "behaviours",
     "creart",
@@ -11,13 +12,15 @@
     "loguru",
     "mihoyo",
     "minigg",
+    "ondelete",
     "richuru",
     "saya",
     "Shutdowned",
     "sqlalchemy",
     "tablenane",
     "timedelta",
-    "tomlkit"
+    "tomlkit",
+    "uselist"
   ],
   "python.formatting.provider": "black",
   "python.analysis.completeFunctionParens": true,
