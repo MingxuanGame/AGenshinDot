@@ -9,11 +9,13 @@
     "Genshin",
     "graia",
     "loguru",
+    "mihoyo",
     "minigg",
     "richuru",
     "saya",
     "Shutdowned",
     "sqlalchemy",
+    "tablenane",
     "timedelta",
     "tomlkit"
   ],
