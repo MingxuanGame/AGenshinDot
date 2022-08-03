@@ -228,7 +228,7 @@ uvicorn = ["uvicorn (>=0.17.6,<1.0.0)"]
 
 [[package]]
 name = "graia-ariadne"
-version = "0.7.18"
+version = "0.8.0"
 description = "Another elegant Python QQ Bot framework for mirai and mirai-api-http v2."
 category = "main"
 optional = false
@@ -241,17 +241,17 @@ graia-amnesia = ">=0.5.2,<0.6.0"
 graia-broadcast = ">=0.18,<1.0"
 graia-saya = {version = ">=0.0,<1.0", optional = true, markers = "extra == \"standard\""}
 graia-scheduler = {version = ">=0.0,<1.0", optional = true, markers = "extra == \"standard\""}
-launart = ">=0.5.1"
+launart = ">=0.6.0,<1.0.0"
 pydantic = ">=1.8,<2.0"
 richuru = {version = ">=0.1,<1.0", optional = true, markers = "extra == \"standard\""}
 typing-extensions = ">=4.0,<5.0"
 
 [package.extras]
+standard = ["graia-saya (>=0.0,<1.0)", "graia-scheduler (>=0.0,<1.0)", "richuru (>=0.1,<1.0)"]
+graia = ["graia-saya (>=0.0,<1.0)", "graia-scheduler (>=0.0,<1.0)"]
+full = ["arclet-alconna-graia", "graia-saya (>=0.0,<1.0)", "graia-scheduler (>=0.0,<1.0)", "richuru (>=0.1,<1.0)"]
+fastapi = ["uvicorn[standard] (>=0.17.5,<1.0.0)", "fastapi (>=0.74.1,<1.0.0)"]
 alconna = ["arclet-alconna-graia"]
-fastapi = ["fastapi (>=0.74.1,<1.0.0)", "uvicorn[standard] (>=0.17.5,<1.0.0)"]
-full = ["richuru (>=0.1,<1.0)", "graia-scheduler (>=0.0,<1.0)", "graia-saya (>=0.0,<1.0)", "arclet-alconna-graia"]
-graia = ["graia-scheduler (>=0.0,<1.0)", "graia-saya (>=0.0,<1.0)"]
-standard = ["richuru (>=0.1,<1.0)", "graia-scheduler (>=0.0,<1.0)", "graia-saya (>=0.0,<1.0)"]
 
 [[package]]
 name = "graia-broadcast"
@@ -334,7 +334,7 @@ plugins = ["setuptools"]
 
 [[package]]
 name = "launart"
-version = "0.5.2"
+version = "0.6.0"
 description = "Component lifetime manager for runtime."
 category = "main"
 optional = false
@@ -658,7 +658,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d11270c771456c2e387616ccff0669eac680a9be9df4662d5527390dcd8c41c3"
+content-hash = "7d612f911e4cd1aa7505bee1f3a54bc63fe0764e360232900ce0fc729bd7976f"
 
 [metadata.files]
 aiohttp = [
@@ -886,8 +886,8 @@ graia-amnesia = [
     {file = "graia_amnesia-0.5.4-py3-none-any.whl", hash = "sha256:8fe6e3c4d21bdde326e7569a99bfb5818dfbf0d79fa4da7a66ba29a84989297f"},
 ]
 graia-ariadne = [
-    {file = "graia-ariadne-0.7.18.tar.gz", hash = "sha256:4a985ab6af939a050e94cd666816e3ae828a35648eed7a1027acc7fd41b17948"},
-    {file = "graia_ariadne-0.7.18-py3-none-any.whl", hash = "sha256:4b6ee7bfdaa2119bb0397acbd2521487989af5b0aecb078b310af726470435b4"},
+    {file = "graia-ariadne-0.8.0.tar.gz", hash = "sha256:c82e1df77ac14a8eafc98239b57eca13395601a8213534a97e470967009ed7d7"},
+    {file = "graia_ariadne-0.8.0-py3-none-any.whl", hash = "sha256:b0349e7632582b4bd12eb740c4f8651847f47d784369c11e2e48af2415933a3d"},
 ]
 graia-broadcast = [
     {file = "graia-broadcast-0.18.2.tar.gz", hash = "sha256:07b0285d417021c795c3c4f4f12713311fcdec10d63f8e7a8ed7964e2f1b7a5a"},
@@ -971,8 +971,8 @@ isort = [
     {file = "isort-5.10.1.tar.gz", hash = "sha256:e8443a5e7a020e9d7f97f1d7d9cd17c88bcb3bc7e218bf9cf5095fe550be2951"},
 ]
 launart = [
-    {file = "launart-0.5.2-py3-none-any.whl", hash = "sha256:c6936a536760f24c195e91b1cf567457f47b4516ffbff97f932633146f97ebe1"},
-    {file = "launart-0.5.2.tar.gz", hash = "sha256:7060ff71d4b25195067573895ee623d5b2958dcf0adcb7ef013d5dac9ed61f14"},
+    {file = "launart-0.6.0-py3-none-any.whl", hash = "sha256:21a0db0e7493d67567e8913e2f0e35871aaf36a70a41fcc732cc19b881cad5b5"},
+    {file = "launart-0.6.0.tar.gz", hash = "sha256:2452efdb7524740f2e8e59a0de1719d1044f96bed7e16119a8ce8e4b933eb73a"},
 ]
 loguru = [
     {file = "loguru-0.6.0-py3-none-any.whl", hash = "sha256:4e2414d534a2ab57573365b3e6d0234dfb1d84b68b7f3b948e6fb743860a77c3"},
