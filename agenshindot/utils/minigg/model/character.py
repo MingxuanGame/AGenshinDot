@@ -45,7 +45,7 @@ class Character(BaseInfo):
     constellation: str
     cv: CV
     images: Image
-    url: FandomUrl
+    url: Optional[FandomUrl]
     version: str
 
 

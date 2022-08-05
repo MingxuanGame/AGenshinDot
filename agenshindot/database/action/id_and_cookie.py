@@ -22,6 +22,7 @@ async def get_cookie(uid: int) -> Dict[str, str]:
             raw = cookie.cookie
             if raw:
                 simple_cookie.load(raw)
+                return {k: v.value for k, v in simple_cookie.items()}
         if cache_cookie := await db.select(CookieCacheOrm, uid):
             cookie = CookieCache.from_orm(cache_cookie)
         else:
@@ -38,7 +39,7 @@ async def get_cookie(uid: int) -> Dict[str, str]:
             )
             await db.insert_or_update(
                 CookieCacheOrm,
-                PublicCookieOrm.uid == uid,
+                uid,
                 cookie=cookie.cookie,
             )
         simple_cookie.load(cookie.cookie)

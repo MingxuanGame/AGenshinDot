@@ -19,20 +19,28 @@ OS_GAME_RECORD_URL = URL("/game_record/")
 CN_GAME_RECORD_URL = URL("/game_record/app/")
 
 
-async def get_info(uid: int, cookie: Mapping[str, str]) -> Info:
+def get_server(uid: int) -> str:
     start = str(uid)
     if len(start) != 9 or len(start) == 9 and not SERVER.get(start[0]):
         raise ValueError("UID is invalid")
-    server = SERVER.get(start[0], "")
-    is_os = start[0] not in ["1", "2", "5"]
+    return SERVER.get(start[0], "")
+
+
+def is_os(uid: int) -> bool:
+    return str(uid)[0] not in ["1", "2", "5"]
+
+
+async def get_info(uid: int, cookie: Mapping[str, str]) -> Info:
+    server = get_server(uid)
+    os = is_os(uid)
     data = await request(
         endpoint=str(
-            (OS_GAME_RECORD_URL if is_os else CN_GAME_RECORD_URL)
+            (OS_GAME_RECORD_URL if os else CN_GAME_RECORD_URL)
             / "genshin/api/index"
         ),
         cookie=cookie,
         method="GET",
-        os=is_os,
+        os=os,
         params={"role_id": uid, "server": server},
     )
     return Info.parse_obj(data)

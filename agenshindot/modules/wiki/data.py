@@ -103,7 +103,8 @@ def make_character_message(char: Character) -> MessageChain:
             Plain(
                 CHAR_TEMPLATE.format(**char.dict())
                 + f"\n【中文CV】{char.cv.chinese}"
-                + f"\nFandom: {char.url.fandom}\nBWiki: {BWIKI / char.name}"
+                + f"\nBWiki: {BWIKI / char.name}"
+                + (f"Fandom: {char.url.fandom}\n" if char.url else "")
             )
         ]
     )

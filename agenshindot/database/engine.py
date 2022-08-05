@@ -16,7 +16,7 @@ TBase = TypeVar("TBase", bound=Base)
 class Database:
     def __init__(self, db_url: str, **kwargs: Any) -> None:
         self.engine = create_async_engine(db_url, **kwargs)
-        self.session = AsyncSession(bind=self.engine)
+        self.session = AsyncSession(bind=self.engine, expire_on_commit=False)
         self.mu = Semaphore(1) if db_url.startswith("sqlite") else None
 
     async def execute(self, sql: str, **kwargs) -> CursorResult:

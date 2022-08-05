@@ -59,6 +59,8 @@ if ags_config.enable_console:
     )
     saya.install_behaviours(ConsoleBehaviour(con))
 
+saya.install_behaviours(CommanderBehaviour(cmd))
+
 
 with saya.module_context():
     for module_info in iter_modules([str(Path(__file__).parent / "modules")]):
