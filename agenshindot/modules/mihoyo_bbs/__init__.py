@@ -1,25 +1,56 @@
+from __future__ import annotations
+
+from typing import List
+
 from graia.saya import Channel
 from graia.ariadne.app import Ariadne
 from graia.ariadne.model import Group, Member
-from graia.ariadne.message.element import Image, Source
+from graia.ariadne.message.chain import MessageChain
+from graia.ariadne.message.element import At, Image, Source
 from graia.ariadne.message.commander.saya import CommandSchema
 
-from .data import draw, get_cookie
+from ...config import load_config
+from ...database.engine import get_db
 from ...utils.mihoyo_bbs.base import get_server
+from ...database.model.id_and_cookie import ID, IDOrm
+from ...modules.mihoyo_bbs.data import draw, get_cookie
 
 channel = Channel.current()
 channel.name("mihoyo_bbs").author("MingxuanGame").description("原神米游社查询")
+ADMINS = load_config().admins
 
 
-@channel.use(CommandSchema("/uid {uid}"))
+@channel.use(CommandSchema(r"/uid {uid: int}"))
+@channel.use(CommandSchema(r"/uid {...uid: At}"))
 async def handler(
     app: Ariadne,
-    # event: MessageEvent,
     source: Source,
     group: Group,
     member: Member,
-    uid: int,
+    uid: int | List[At],
 ):
+    if isinstance(uid, list):
+        if member.id not in ADMINS:
+            await app.send_message(group, "你不是机器人管理员，无权操作", quote=source)
+            return
+        db = get_db()
+        user = uid[0]
+        if not db:
+            await app.send_message(group, "E: 数据库未开启，请联系机器人管理员", quote=source)
+            return
+        uid = await db.select(IDOrm, user.target)
+        if not uid:
+            await app.send_message(
+                group, MessageChain("未找到", user, "的 UID 信息"), quote=source
+            )
+            return
+        id_ = ID.from_orm(uid).uid
+        if not id_:
+            await app.send_message(
+                group, MessageChain("未找到", user, "的 UID 信息"), quote=source
+            )
+            return
+        uid = id_
     try:
         get_server(uid)
     except ValueError:
