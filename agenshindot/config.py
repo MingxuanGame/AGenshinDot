@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Optional
 from sys import exit as exit_
 from datetime import timedelta
 from traceback import print_exc
+from typing import Set, Optional
 
 from tomlkit import load
 from tomlkit.exceptions import UnexpectedCharError
@@ -31,6 +31,8 @@ class Config(BaseModel):
     """QQ 号"""
     verify_key: str
     """鉴权密钥"""
+    admins: Set[int] = Field(default_factory=set)
+    """管理员集合"""
     enable_console: bool = True
     """是否启用控制台"""
     log: LogConfig = Field(default_factory=LogConfig)

@@ -1,18 +1,23 @@
 from __future__ import annotations
 
-from typing import List, Tuple
+from functools import partial
 from asyncio import gather, create_task
+from typing import Set, List, Tuple, Optional
 
+from loguru import logger
 from graia.saya import Channel
+from graia.scheduler import timers
 from graia.ariadne.app import Ariadne
+from graia.ariadne.model import Friend
 from graia.ariadne.message.element import Source
+from graia.scheduler.saya import SchedulerSchema
 from graia.ariadne.message.parser.base import MatchContent
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 from graia.ariadne.event.message import GroupMessage, FriendMessage
 
 from ..config import load_config
-from ..database.engine import get_db
 from ..utils import cookie_str_to_mapping
+from ..database.engine import Database, get_db
 from ..utils.mihoyo_bbs.base import get_account
 from ..utils.mihoyo_bbs.request import StatusError
 from ..database.model.id_and_cookie import ID, IDOrm, Cookie, CookieOrm
@@ -30,7 +35,18 @@ SMALL_MESSAGE = """Cookie 校验已完成
 BINDER_MESSAGE = """[AGenshinDot] 你的 Cookie 已经失效，请重新绑定
 绑定命令: /gbind cookie
 获取 Cookie: https://github.com/KimigaiiWuyi/GenshinUID/issues/255"""
-SEND_MESSAGE = load_config().send_message_to_binder
+CONFIG = load_config()
+SEND_MESSAGE = CONFIG.send_message_to_binder
+ADMINS = CONFIG.admins
+
+
+@channel.use(SchedulerSchema(timers.crontabify("30 2 * * * 0")))
+async def timer(app: Ariadne):
+    logger.info("schedule")
+    db = get_db()
+    if not db:
+        return
+    await check_cookie(app, db, ADMINS)
 
 
 @channel.use(
@@ -46,7 +62,14 @@ async def handler(
     if not db:
         await app.send_message(event, "E: 数据库未开启，请联系机器人管理员", quote=source)
         return
-    await app.send_message(event, "请稍等，正在校验", quote=source)
+    await check_cookie(app, db, event)
+
+
+async def check_cookie(
+    app: Ariadne, db: Database, target: GroupMessage | FriendMessage | Set[int]
+):  # sourcery skip: low-code-quality
+    if not isinstance(target, set):
+        await app.send_message(target, "请稍等，正在校验")
     cookies = [
         Cookie.from_orm(cookie)
         for cookie in await db.fetch(CookieOrm)
@@ -89,22 +112,34 @@ async def handler(
                     await app.send_friend_message(id_.qq, BINDER_MESSAGE)
 
     if len(cookies) > 20:
-        await app.send_message(
-            event,
-            SMALL_MESSAGE.format(
+        send_msg = partial(
+            app.send_message,
+            message=SMALL_MESSAGE.format(
                 len(valid_cookie),
                 len(invalid_cookie),
                 len(unknown_cookie),
                 len(valid_cookie) + len(invalid_cookie) + len(unknown_cookie),
             ),
-            quote=source,
         )
-        return
-    msg = "".join(
-        VALID_TEMPLATE.format(uid=i.uid) + "\n" for i in valid_cookie
-    )
-    for i in invalid_cookie:
-        msg += INVALID_TEMPLATE.format(uid=i.uid) + "\n"
-    for i, e in unknown_cookie:
-        msg += UNKNOWN_TEMPLATE.format(uid=i.uid, e=e) + "\n"
-    await app.send_message(event, "Cookie 校验已完成\n" + msg, quote=source)
+    else:
+        msg = "".join(
+            VALID_TEMPLATE.format(uid=i.uid) + "\n" for i in valid_cookie
+        )
+        for i in invalid_cookie:
+            msg += INVALID_TEMPLATE.format(uid=i.uid) + "\n"
+        for i, e in unknown_cookie:
+            msg += UNKNOWN_TEMPLATE.format(uid=i.uid, e=e) + "\n"
+        send_msg = partial(app.send_message, message="Cookie 校验已完成\n" + msg)
+    if isinstance(target, set):
+        admins: List[Optional[Friend]] = await gather(
+            *[create_task(app.get_friend(id_)) for id_ in target]
+        )
+        await gather(
+            *[
+                create_task(send_msg(target=friend))
+                for friend in admins
+                if friend
+            ]
+        )
+    else:
+        await send_msg(target=target)
