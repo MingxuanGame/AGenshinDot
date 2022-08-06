@@ -22,20 +22,24 @@ from .version import __version__
 from .database.engine import close, get_db, init_db
 
 ags_config = load_config()
-ags_config_dict = load_config().dict(exclude_none=True)
-ags_config_dict.pop("account")
-ags_config_dict.pop("enable_console")
-ags_config_dict.pop("log")
-ags_config_dict.pop("enable_bind_cookie")
-ags_config_dict.pop("verify_key")
-ags_config_dict.pop("db_url")
 
 bcc = create(Broadcast)
 cmd = create(Commander)
 saya = create(Saya)
 app = Ariadne(
     connection=config(
-        ags_config.account, ags_config.verify_key, *ags_config_dict.values()
+        ags_config.account,
+        ags_config.verify_key,
+        *[
+            config
+            for config in (
+                ags_config.http,
+                ags_config.ws,
+                ags_config.webhook,
+                ags_config.ws_reverse,
+            )
+            if config
+        ],
     ),
 )
 saya.install_behaviours(CommanderBehaviour(cmd))

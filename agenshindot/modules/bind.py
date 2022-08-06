@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from typing import Tuple
-from http.cookies import SimpleCookie
 
 from loguru import logger
 from graia.saya import Channel
@@ -24,6 +23,7 @@ from graia.ariadne.message.parser.twilight import (
 )
 
 from ..config import load_config
+from ..utils import cookie_str_to_mapping
 from ..database.engine import Database, get_db
 from ..utils.mihoyo_bbs.request import StatusError
 from ..utils.mihoyo_bbs.base import get_server, get_account
@@ -160,12 +160,9 @@ async def friend_handler(
                 cookie_str, source = cookie_and_source
                 if cookie_str == "no":
                     return
-            cookie = SimpleCookie()
-            cookie.load(cookie_str)
+            cookie = cookie_str_to_mapping(cookie_str)
             try:
-                account = await get_account(
-                    {k: v.value for k, v in cookie.items()}
-                )
+                account = await get_account(cookie)
                 if isinstance(account, CNAccounts):
                     is_os = False
                     accounts = list(

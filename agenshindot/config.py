@@ -39,6 +39,8 @@ class Config(BaseModel):
     """数据库 URL"""
     enable_bind_cookie: bool = False
     """启用 cookie 绑定"""
+    send_message_to_binder: bool = True
+    """Cookie 失效时是否向 Cookie 绑定者反馈信息"""
 
     ws: Optional[WebsocketClientConfig] = None
     """正向 WebSocket"""
