@@ -13,6 +13,7 @@ from aiohttp import ClientSession
 OS_DS_SALT = "6cqshh5dhw73bzxn20oexa9k516chk7s"
 CN_DS_SALT = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
 CN_API = URL("https://api-takumi-record.mihoyo.com")
+CN_OLD_API = URL("https://api-takumi.mihoyo.com")
 OS_API = URL("https://bbs-api-os.hoyoverse.com")
 CN_VERSION = "2.11.1"
 CN_TYPE = "5"
@@ -60,12 +61,17 @@ async def request(
     cookie: Mapping[str, str],
     method: Literal["GET", "POST"] = "GET",
     os: bool = False,
+    old: bool = False,
     json: Optional[Mapping[str, Any]] = None,
     params: Optional[Mapping[str, str | int]] = None,
     **kwargs: Any,
 ) -> List[Any] | Dict[str, Any]:
+    if os:
+        url = OS_API
+    else:
+        url = CN_OLD_API if old else CN_API
     async with ClientSession(
-        base_url=OS_API if os else CN_API,
+        base_url=url,
         headers={
             "ds": os_ds_generator() if os else cn_ds_generator(json, params),
             "x-rpc-app_version": OS_VERSION if os else CN_VERSION,

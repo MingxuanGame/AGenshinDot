@@ -45,7 +45,7 @@ class CookieCacheOrm(Base):
 class ID(BaseModel):
     qq: int
     uid: Optional[int] = None
-    mihoyo_bbs: Optional[int] = None
+    mihoyo_id: Optional[int] = None
 
     class Config:
         orm_mode = True

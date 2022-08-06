@@ -26,6 +26,7 @@ ags_config_dict = load_config().dict(exclude_none=True)
 ags_config_dict.pop("account")
 ags_config_dict.pop("enable_console")
 ags_config_dict.pop("log")
+ags_config_dict.pop("enable_bind_cookie")
 ags_config_dict.pop("verify_key")
 ags_config_dict.pop("db_url")
 

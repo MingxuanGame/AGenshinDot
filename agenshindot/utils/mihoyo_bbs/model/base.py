@@ -3,6 +3,7 @@ from typing import List
 from pydantic import Field, BaseModel
 
 
+### Base Info ###
 class Role(BaseModel):
     avatar_url: str = Field(..., alias="AvatarUrl")
     nickname: str
@@ -80,3 +81,43 @@ class Info(BaseModel):
     # city_explorations: List[Any]  # unused?
     world_explorations: List[World]
     homes: List[Home]
+
+
+### Account Info ###
+
+
+class CNAccount(BaseModel):
+    game_biz: str
+    region: str
+    game_uid: str
+    nickname: str
+    level: int
+    is_chosen: bool
+    region_name: str
+    is_official: bool
+
+    def is_genshin(self) -> bool:
+        return self.game_biz == "hk4e_cn"
+
+
+class CNAccounts(BaseModel):
+    mihoyo_id: int
+    list: List[CNAccount]
+
+
+class OSAccount(BaseModel):
+    has_role: bool
+    game_id: int
+    game_uid: str = Field(..., alias="game_role_id")  # 与国服字段同步
+    nickname: str
+    region: str
+    level: int
+    background_image: str
+    is_public: bool
+    region_name: str
+    url: str
+
+
+class OSAccounts(BaseModel):
+    mihoyo_id: int
+    list: List[OSAccount]

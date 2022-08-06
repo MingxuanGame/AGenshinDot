@@ -37,6 +37,8 @@ class Config(BaseModel):
     """日志配置"""
     db_url: str = "sqlite+aiosqlite:///agenshindot.db"
     """数据库 URL"""
+    enable_bind_cookie: bool = False
+    """启用 cookie 绑定"""
 
     ws: Optional[WebsocketClientConfig] = None
     """正向 WebSocket"""
