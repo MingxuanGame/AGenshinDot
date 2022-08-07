@@ -20,8 +20,8 @@ channel.name("mihoyo_bbs").author("MingxuanGame").description("原神米游社�
 ADMINS = load_config().admins
 
 
-@channel.use(CommandSchema(r"/guid {uid: int}"))
-@channel.use(CommandSchema(r"/guid {...uid: At}"))
+@channel.use(CommandSchema("/guid {uid: int = 0}"))
+@channel.use(CommandSchema("/guid {...uid: At}"))
 async def handler(
     app: Ariadne,
     source: Source,
@@ -30,6 +30,8 @@ async def handler(
     uid: int | List[At],
 ):
     if isinstance(uid, list):
+        if not uid:
+            return
         if member.id not in ADMINS:
             await app.send_message(group, "你不是机器人管理员，无权操作", quote=source)
             return
@@ -43,14 +45,35 @@ async def handler(
             await app.send_message(
                 group, MessageChain("未找到", user, "的 UID 信息"), quote=source
             )
+
             return
         id_ = ID.from_orm(uid).uid
         if not id_:
             await app.send_message(
                 group, MessageChain("未找到", user, "的 UID 信息"), quote=source
             )
+
             return
         uid = id_
+    db = get_db()
+    if not db:
+        await app.send_message(group, "E: 数据库未开启，请联系机器人管理员", quote=source)
+        return
+    if uid == 0:
+        uid_db = await db.select(IDOrm, member.id)
+        if (
+            not uid_db
+            or not (model := ID.from_orm(uid_db))
+            or model.uid is None
+        ):
+            await app.send_message(
+                group,
+                MessageChain("未找到", At(member), "的 UID 信息"),
+                quote=source,
+            )
+
+            return
+        uid = model.uid
     try:
         get_server(uid)
     except ValueError:
@@ -65,5 +88,5 @@ async def handler(
     if isinstance(bio, str):
         await app.send_message(group, bio, quote=source)
     else:
-        bio.seek(0)  # 别问，问就是 img.save(bio) 写到文件末尾了
+        bio.seek(0)
         await app.send_message(group, Image(data_bytes=bio))
