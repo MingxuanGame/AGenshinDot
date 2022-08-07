@@ -20,18 +20,28 @@ from ..utils import cookie_str_to_mapping
 from ..database.engine import Database, get_db
 from ..utils.mihoyo_bbs.base import get_account
 from ..utils.mihoyo_bbs.request import StatusError
-from ..database.model.id_and_cookie import ID, IDOrm, Cookie, CookieOrm
+from ..database.model.id_and_cookie import (
+    ID,
+    IDOrm,
+    Cookie,
+    CookieOrm,
+    PublicCookie,
+    PublicCookieOrm,
+)
 
 channel = Channel.current()
 channel.name("bind").author("MingxuanGame").description("原神 校验 Cookie 是否可用")
 VALID_TEMPLATE = "UID {uid} 的 Cookie 可用"
 INVALID_TEMPLATE = "UID {uid} 的 Cookie 已失效"
 UNKNOWN_TEMPLATE = "UID {uid} 的 Cookie 状态未知 - {e}"
-SMALL_MESSAGE = """Cookie 校验已完成
+SMALL_MESSAGE = """=== Cookie 校验已完成 ===
 有效 Cookie: {}
 无效 Cookie: {}
 未知状态 Cookie: {}
 总计 {} 个 Cookie"""
+PUBLIC_COOKIE_TEMPLATE = """公共 Cookie:
+有效: {}，无效: {}，未知状态: {}
+总计 {} 个公共 Cookie"""
 BINDER_MESSAGE = """[AGenshinDot] 你的 Cookie 已经失效，请重新绑定
 绑定命令: /gbind cookie
 获取 Cookie: https://github.com/KimigaiiWuyi/GenshinUID/issues/255"""
@@ -70,19 +80,28 @@ async def check_cookie(
 ):  # sourcery skip: low-code-quality
     if not isinstance(target, set):
         await app.send_message(target, "请稍等，正在校验")
+
     cookies = [
         Cookie.from_orm(cookie)
         for cookie in await db.fetch(CookieOrm)
         if cookie.cookie
     ]
+    public_cookies = [
+        PublicCookie.from_orm(cookie)
+        for cookie in await db.fetch(PublicCookieOrm)
+    ]
 
-    valid_cookie: List[Cookie] = []
-    invalid_cookie: List[Cookie] = []
-    unknown_cookie: List[Tuple[Cookie, Exception]] = []
+    valid_cookie: List[Cookie | PublicCookie] = []
+    invalid_cookie: List[Cookie | PublicCookie] = []
+    unknown_cookie: List[Tuple[Cookie | PublicCookie, Exception]] = []
+
+    def get_account_task(cookie):
+        return create_task(get_account(cookie_str_to_mapping(cookie.cookie)))
+
     results = await gather(
         *[
-            create_task(get_account(cookie_str_to_mapping(cookie.cookie)))
-            for cookie in cookies
+            get_account_task(cookie)
+            for cookie in cookies + public_cookies
             if cookie.cookie
         ],
         return_exceptions=True,
@@ -99,19 +118,26 @@ async def check_cookie(
         *[
             create_task(db.delete(CookieOrm, CookieOrm.uid == i.uid))
             for i in invalid_cookie
+            if isinstance(i, Cookie)
+        ]
+        + [
+            create_task(db.delete(PublicCookieOrm, PublicCookieOrm.id == i.id))
+            for i in invalid_cookie
+            if isinstance(i, PublicCookie)
         ]
     )
 
     friends = [friend.id for friend in await app.get_friend_list()]
     if SEND_MESSAGE:
         for i in invalid_cookie:
-            id_ = list(await db.fetch(IDOrm, IDOrm.uid == i.uid))
-            if id_:
-                id_ = ID.from_orm(id_[0])
-                if id_.qq in friends:
-                    await app.send_friend_message(id_.qq, BINDER_MESSAGE)
+            if isinstance(i, Cookie):
+                id_ = list(await db.fetch(IDOrm, IDOrm.uid == i.uid))
+                if id_:
+                    id_ = ID.from_orm(id_[0])
+                    if id_.qq in friends:
+                        await app.send_friend_message(id_.qq, BINDER_MESSAGE)
 
-    if len(cookies) > 20:
+    if len(cookies) + len(public_cookies) > 40:
         send_msg = partial(
             app.send_message,
             message=SMALL_MESSAGE.format(
@@ -122,14 +148,36 @@ async def check_cookie(
             ),
         )
     else:
-        msg = "".join(
-            VALID_TEMPLATE.format(uid=i.uid) + "\n" for i in valid_cookie
-        )
+        msg = ""
+        valid_public_cookie = invalid_public_cookie = unknown_public_cookie = 0
+        for i in valid_cookie:
+            if isinstance(i, Cookie):
+                msg += VALID_TEMPLATE.format(uid=i.uid) + "\n"
+            else:
+                valid_public_cookie += 1
         for i in invalid_cookie:
-            msg += INVALID_TEMPLATE.format(uid=i.uid) + "\n"
+            if isinstance(i, Cookie):
+                msg += INVALID_TEMPLATE.format(uid=i.uid) + "\n"
+            else:
+                invalid_public_cookie += 1
         for i, e in unknown_cookie:
-            msg += UNKNOWN_TEMPLATE.format(uid=i.uid, e=e) + "\n"
-        send_msg = partial(app.send_message, message="Cookie 校验已完成\n" + msg)
+            if isinstance(i, Cookie):
+                msg += UNKNOWN_TEMPLATE.format(uid=i.uid, e=e) + "\n"
+            else:
+                unknown_public_cookie += 1
+        send_msg = partial(
+            app.send_message,
+            message="Cookie 校验已完成\n"
+            + msg
+            + PUBLIC_COOKIE_TEMPLATE.format(
+                valid_public_cookie,
+                invalid_public_cookie,
+                unknown_public_cookie,
+                valid_public_cookie
+                + invalid_public_cookie
+                + unknown_public_cookie,
+            ),
+        )
     if isinstance(target, set):
         admins: List[Optional[Friend]] = await gather(
             *[create_task(app.get_friend(id_)) for id_ in target]
