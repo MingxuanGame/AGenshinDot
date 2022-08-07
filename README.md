@@ -32,7 +32,9 @@ verify_key = "agenshindot"
 # 是否启用控制台
 enable_console = false
 # 是否开启 Cookie 绑定
-enable_cookie = true
+enable_bind_cookie = false
+# 机器人管理员 QQ 号
+admins = [1060148379]
 
 # 以下为连接配置
 # 如果不配置则默认为 HTTP + 正向 WebSocket，连接地址为 localhost:8080
