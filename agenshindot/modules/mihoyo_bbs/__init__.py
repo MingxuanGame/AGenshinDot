@@ -20,8 +20,8 @@ channel.name("mihoyo_bbs").author("MingxuanGame").description("原神米游社�
 ADMINS = load_config().admins
 
 
-@channel.use(CommandSchema(r"/uid {uid: int}"))
-@channel.use(CommandSchema(r"/uid {...uid: At}"))
+@channel.use(CommandSchema(r"/guid {uid: int}"))
+@channel.use(CommandSchema(r"/guid {...uid: At}"))
 async def handler(
     app: Ariadne,
     source: Source,
