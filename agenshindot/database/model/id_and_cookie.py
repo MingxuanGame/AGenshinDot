@@ -11,18 +11,15 @@ class IDOrm(Base):
     __tablename__ = "id"
 
     qq = Column(Integer, primary_key=True)
-    uid = Column(Integer, ForeignKey("cookie.uid", ondelete="SET NULL"))
+    uid = Column(Integer)
     mihoyo_id = Column(Integer)
-
-    cookie = relationship(
-        "CookieOrm", backref=backref("extend", uselist=False)
-    )
 
 
 class CookieOrm(Base):
     __tablename__ = "cookie"
 
-    uid = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    uid = Column(Integer)
     cookie = Column(Text)
     times = Column(SmallInteger)
 

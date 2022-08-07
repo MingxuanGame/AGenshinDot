@@ -314,15 +314,32 @@ async def bind_uid_or_mihoyo_id(qq: int, is_uid: bool, value: int) -> str:
                 raise ValueError
         except ValueError:
             return "E: UID 不合法，请检查输入"
+
+    async def update(
+        db: Database,
+        key: str,
+        value: int,
+        is_uid: bool,
+        model: ID,
+        is_overwrite: bool,
+    ):
+        await db.update(IDOrm, IDOrm.qq == qq, **{key: value})
+        if is_uid and list(
+            await db.fetch(CookieOrm, CookieOrm.uid == model.uid)
+        ):
+            await db.update(CookieOrm, CookieOrm.uid == model.uid, uid=value)
+        if is_overwrite:
+            return (
+                f"{name} 曾绑定过，本次绑定已覆盖\n上一次绑定的 "
+                f"{name} 为 {getattr(model, key, None)}"
+            )
+        return f"{name} 绑定成功！"
+
     if latest_data is None:
         await db.insert(IDOrm, **{"qq": qq, key: value})
         return f"{name} 绑定成功！"
-    elif (model := ID.from_orm(latest_data)) and not getattr(model, key, None):
-        await db.update(IDOrm, IDOrm.qq == qq, **{key: value})
-        return f"{name} 绑定成功！"
     else:
         model = ID.from_orm(latest_data)
-        await db.update(IDOrm, IDOrm.qq == qq, **{key: value})
-        return (
-            f"{name} 曾绑定过，本次绑定已覆盖\n上一次绑定的 {name} 为 {getattr(model, key, None)}"
+        return await update(
+            db, key, value, is_uid, model, getattr(model, key, None) is None
         )

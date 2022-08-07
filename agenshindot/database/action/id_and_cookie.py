@@ -17,7 +17,8 @@ async def get_cookie(uid: int) -> Dict[str, str]:
     if db:
         simple_cookie = SimpleCookie()
 
-        if own_cookie := await db.select(CookieOrm, uid):
+        if own_cookie := list(await db.fetch(CookieOrm, CookieOrm.uid == uid)):
+            own_cookie = own_cookie[0]
             cookie = Cookie.from_orm(own_cookie)
             raw = cookie.cookie
             if raw:
