@@ -21,7 +21,6 @@ from graia.ariadne.message.parser.twilight import (
 from agenshindot.version import __version__
 from agenshindot.database.engine import get_db
 
-saya = Saya.current()
 channel = Channel.current()
 
 LOGO = r"""
