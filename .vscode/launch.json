@@ -1,19 +1,20 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: AGenshinDot",
-            "type": "python",
-            "request": "launch",
-            "module": "agenshindot",
-            "justMyCode": false
-        },
-        {
-          "name": "Python: bot.py",
-          "type": "python",
-          "request": "launch",
-          "module": "bot.py",
-          "justMyCode": false
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: bot.py",
+      "type": "python",
+      "request": "launch",
+      "program": "bot.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python: AGenshinDot",
+      "type": "python",
+      "request": "launch",
+      "module": "agenshindot",
+      "justMyCode": false
+    }
+  ]
 }

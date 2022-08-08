@@ -18,10 +18,9 @@ from graia.ariadne.message.parser.twilight import (
     WildcardMatch,
 )
 
-from ..database import get_db
-from ..version import __version__
+from agenshindot.version import __version__
+from agenshindot.database.engine import get_db
 
-saya = Saya.current()
 channel = Channel.current()
 
 LOGO = r"""
@@ -76,6 +75,7 @@ async def db_execute(cmd: ForceResult):
     try:
         start_time = time()
         result = await db.execute(cmd.result.display)
+        total = round(time() - start_time, 3)
         if result.rowcount != -1:
             logger.opt(raw=True, colors=True).info(
                 f"受影响的行数: <green>{result.rowcount}</green>\n"
@@ -87,8 +87,7 @@ async def db_execute(cmd: ForceResult):
                 table.add_row(*map(str, i))
             console.print(table)
         logger.opt(raw=True, colors=True).success(
-            "SQL: <green>OK</green> "
-            f"time: <green>{round(time()-start_time, 3)}s</green>\n"
+            "SQL: <green>OK</green> " f"time: <green>{total}s</green>\n"
         )
     except DatabaseError as e:
         logger.opt(raw=True, colors=True).error(

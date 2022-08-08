@@ -10,12 +10,12 @@ from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image, Plain
 from aiohttp import ClientResponseError, ClientConnectorError
 
-from ...utils import send_msg_auto_forward
-from ...utils.minigg.model.weapon import Weapon
-from ...utils.minigg.weapon import WeaponClient
-from ...utils.minigg.exception import NotFoundError
-from ...utils.minigg.character import CharacterClient
-from ...utils.minigg.model.character import Character
+from agenshindot.utils import send_msg_auto_forward
+from agenshindot.utils.minigg.model.weapon import Weapon
+from agenshindot.utils.minigg.weapon import WeaponClient
+from agenshindot.utils.minigg.exception import NotFoundError
+from agenshindot.utils.minigg.character import CharacterClient
+from agenshindot.utils.minigg.model.character import Character
 
 BWIKI = URL("https://wiki.biligame.com/ys")
 
@@ -103,7 +103,8 @@ def make_character_message(char: Character) -> MessageChain:
             Plain(
                 CHAR_TEMPLATE.format(**char.dict())
                 + f"\n【中文CV】{char.cv.chinese}"
-                + f"\nFandom: {char.url.fandom}\nBWiki: {BWIKI / char.name}"
+                + f"\nBWiki: {BWIKI / char.name}"
+                + (f"Fandom: {char.url.fandom}\n" if char.url else "")
             )
         ]
     )

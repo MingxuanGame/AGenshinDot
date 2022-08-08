@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Optional
 from sys import exit as exit_
 from datetime import timedelta
 from traceback import print_exc
+from typing import Set, Optional
 
 from tomlkit import load
 from tomlkit.exceptions import UnexpectedCharError
@@ -31,12 +31,18 @@ class Config(BaseModel):
     """QQ 号"""
     verify_key: str
     """鉴权密钥"""
+    admins: Set[int] = Field(default_factory=set)
+    """管理员集合"""
     enable_console: bool = True
     """是否启用控制台"""
     log: LogConfig = Field(default_factory=LogConfig)
     """日志配置"""
     db_url: str = "sqlite+aiosqlite:///agenshindot.db"
     """数据库 URL"""
+    enable_bind_cookie: bool = False
+    """启用 cookie 绑定"""
+    send_message_to_binder: bool = True
+    """Cookie 失效时是否向 Cookie 绑定者反馈信息"""
 
     ws: Optional[WebsocketClientConfig] = None
     """正向 WebSocket"""

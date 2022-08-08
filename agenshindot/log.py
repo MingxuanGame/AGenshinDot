@@ -44,11 +44,7 @@ def patch_logger(
         logger.add(stdout, level=level)
 
     if enable_db_log:
-        for log_name in (
-            "sqlalchemy",
-            "sqlalchemy.engine.Engine",
-            "sqlalchemy.engine",
-        ):
+        for log_name in ("sqlalchemy.engine.Engine",):
             logging_logger = logging.getLogger(log_name)
             logging_logger.setLevel(LEVELS.get(level, 20))
             logging_logger.handlers.clear()

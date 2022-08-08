@@ -1,5 +1,6 @@
 from pathlib import Path
 from pkgutil import iter_modules
+from asyncio import get_event_loop
 
 from creart import create
 from loguru import logger
@@ -12,27 +13,33 @@ from prompt_toolkit.formatted_text import HTML
 from graia.ariadne.connection.config import config
 from graia.ariadne.message.commander import Commander
 from graia.ariadne.console.saya import ConsoleBehaviour
+from graia.ariadne.event.lifecycle import ApplicationLaunched
 from graia.ariadne.message.commander.saya import CommanderBehaviour
 
-from .database import init_db
 from .log import patch_logger
 from .config import load_config
 from .version import __version__
+from .database.engine import close, get_db, init_db
 
 ags_config = load_config()
-ags_config_dict = load_config().dict(exclude_none=True)
-ags_config_dict.pop("account")
-ags_config_dict.pop("enable_console")
-ags_config_dict.pop("log")
-ags_config_dict.pop("verify_key")
-ags_config_dict.pop("db_url")
 
 bcc = create(Broadcast)
 cmd = create(Commander)
 saya = create(Saya)
 app = Ariadne(
     connection=config(
-        ags_config.account, ags_config.verify_key, *ags_config_dict.values()
+        ags_config.account,
+        ags_config.verify_key,
+        *[
+            config
+            for config in (
+                ags_config.http,
+                ags_config.ws,
+                ags_config.webhook,
+                ags_config.ws_reverse,
+            )
+            if config
+        ],
     ),
 )
 saya.install_behaviours(CommanderBehaviour(cmd))
@@ -41,6 +48,7 @@ patch_logger(
     ags_config.log.level,
     ags_config.log.expire_time,
     not ags_config.enable_console,
+    ags_config.log.db_log,
 )
 
 if ags_config.enable_console:
@@ -56,6 +64,8 @@ if ags_config.enable_console:
     )
     saya.install_behaviours(ConsoleBehaviour(con))
 
+saya.install_behaviours(CommanderBehaviour(cmd))
+
 
 with saya.module_context():
     for module_info in iter_modules([str(Path(__file__).parent / "modules")]):
@@ -66,6 +76,21 @@ with saya.module_context():
                 continue
             module_name = f"agenshindot.modules.{module_info.name}"
             saya.require(module_name)
+
+
+@bcc.receiver(ApplicationLaunched)
+async def start(app: Ariadne):
+    try:
+        init_db(ags_config.db_url, ags_config.log.db_log)
+        db = get_db()
+        if db:
+            await db.create_tables()
+            return
+        else:
+            logger.critical("数据库未能启动，已退出")
+    except Exception:
+        logger.exception("数据库出现问题，已退出")
+    app.stop()
 
 
 def main():
@@ -80,9 +105,9 @@ def main():
     logger.opt(colors=True).info(
         "AGenshinDot: <blue>https://github.com/MingxuanGame/AGenshinDot</blue>"
     )
-    init_db(ags_config.db_url, ags_config.log.db_log)
     try:
         app.launch_blocking()
     except KeyboardInterrupt:
         app.stop()
+    get_event_loop().run_until_complete(close())
     logger.info("AGenshinDot 已关闭")

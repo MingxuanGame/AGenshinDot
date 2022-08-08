@@ -8,6 +8,8 @@ AGenshinDot 遵循 `AGPLv3` 许可协议开放全部源代码，你可在[这里
 
 AGenshinDot 仅供学习娱乐使用，禁止将此 Bot 用于商用和非法用途.
 
+AGenshinDot 项目及作者不对因使用本项目所造成的损失进行赔偿，也不承担任何法律责任.
+
 ## 安装
 
 使用 Poetry 安装.
@@ -29,6 +31,10 @@ account = 1185285105
 verify_key = "agenshindot"
 # 是否启用控制台
 enable_console = false
+# 是否开启 Cookie 绑定
+enable_bind_cookie = false
+# 机器人管理员 QQ 号
+admins = [1060148379]
 
 # 以下为连接配置
 # 如果不配置则默认为 HTTP + 正向 WebSocket，连接地址为 localhost:8080
@@ -73,7 +79,7 @@ level = "INFO"
 # 过期时间，过期的日志将被删除，格式请看 
 # https://pydantic-docs.helpmanual.io/usage/types/#datetime-types
 # 中 `timedelta` 部分
-expire_time = P14DT0H0M0S
+expire_time = "P14DT0H0M0S"
 # 是否启用数据库日志
 db_log = false
 ```
