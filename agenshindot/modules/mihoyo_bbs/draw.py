@@ -66,7 +66,6 @@ async def draw_info(
     font_15 = ImageFont.truetype(str(RESOURCE_PATH / "HYWH85W.ttf"), 15)
     font_16 = ImageFont.truetype(str(RESOURCE_PATH / "HYWH85W.ttf"), 16)
     font_18 = ImageFont.truetype(str(RESOURCE_PATH / "HYWH85W.ttf"), 18)
-    font_16 = ImageFont.truetype(str(RESOURCE_PATH / "HYWH85W.ttf"), 16)
     font_24 = ImageFont.truetype(str(RESOURCE_PATH / "HYWH85W.ttf"), 24)
     font_30 = ImageFont.truetype(str(RESOURCE_PATH / "HYWH85W.ttf"), 30)
 
