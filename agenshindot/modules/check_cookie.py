@@ -173,9 +173,7 @@ async def check_cookie(
                 valid_public_cookie,
                 invalid_public_cookie,
                 unknown_public_cookie,
-                valid_public_cookie
-                + invalid_public_cookie
-                + unknown_public_cookie,
+                len(public_cookies),
             ),
         )
     if isinstance(target, set):
