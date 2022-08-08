@@ -48,7 +48,7 @@ def for_draw(
     reversed: Optional[bool] = False,
 ) -> None:
     if next_line and mode == "line":
-        warn("next_line is not available in y mode", UserWarning)
+        warn("next_line is not available in `line` mode", UserWarning)
     if next_line and not next_line_interval:
         raise ValueError(
             "next_line_interval cannot be None when next_line is not None"
@@ -80,7 +80,7 @@ def for_text(
     **kwargs: Any,
 ) -> None:
     if next_line and mode == "line":
-        warn("next_line is not available in y mode", UserWarning)
+        warn("next_line is not available in `line` mode", UserWarning)
     if next_line and not next_line_interval:
         raise ValueError(
             "next_line_interval cannot be None when next_line is not None"
