@@ -9,11 +9,11 @@ from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import At, Image, Source
 from graia.ariadne.message.commander.saya import CommandSchema
 
-from ...config import load_config
-from ...database.engine import get_db
-from ...utils.mihoyo_bbs.base import get_server
-from ...database.model.id_and_cookie import ID, IDOrm
-from ...modules.mihoyo_bbs.data import draw, get_cookie
+from agenshindot.config import load_config
+from agenshindot.database.engine import get_db
+from agenshindot.utils.mihoyo_bbs.base import get_server
+from agenshindot.database.model.id_and_cookie import ID, IDOrm
+from agenshindot.modules.mihoyo_bbs.data import draw, get_cookie
 
 channel = Channel.current()
 channel.name("mihoyo_bbs").author("MingxuanGame").description("原神米游社查询")

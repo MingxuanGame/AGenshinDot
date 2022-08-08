@@ -18,8 +18,8 @@ from graia.ariadne.message.parser.twilight import (
     WildcardMatch,
 )
 
-from ..version import __version__
-from ..database.engine import get_db
+from agenshindot.version import __version__
+from agenshindot.database.engine import get_db
 
 saya = Saya.current()
 channel = Channel.current()

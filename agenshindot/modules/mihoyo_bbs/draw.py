@@ -6,15 +6,14 @@ from textwrap import wrap
 from asyncio import gather, create_task
 from typing import Dict, List, Optional
 
-from graia.ariadne.util.async_exec import cpu_bound
 from aiohttp import ClientSession, ClientResponseError
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-from ...version import __version__
-from ...utils.mihoyo_bbs.model.base import Info
-from ...utils.minigg.character import CharacterClient
-from ...utils.minigg.model.character import Character
-from ...utils.img import (
+from agenshindot.version import __version__
+from agenshindot.utils.mihoyo_bbs.model.base import Info
+from agenshindot.utils.minigg.character import CharacterClient
+from agenshindot.utils.minigg.model.character import Character
+from agenshindot.utils.img import (
     for_draw,
     for_text,
     rectangle_to_round,

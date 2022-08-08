@@ -15,12 +15,12 @@ from graia.ariadne.message.parser.base import MatchContent
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 from graia.ariadne.event.message import GroupMessage, FriendMessage
 
-from ..config import load_config
-from ..utils import cookie_str_to_mapping
-from ..database.engine import Database, get_db
-from ..utils.mihoyo_bbs.base import get_account
-from ..utils.mihoyo_bbs.request import StatusError
-from ..database.model.id_and_cookie import (
+from agenshindot.config import load_config
+from agenshindot.utils import cookie_str_to_mapping
+from agenshindot.database.engine import Database, get_db
+from agenshindot.utils.mihoyo_bbs.base import get_account
+from agenshindot.utils.mihoyo_bbs.request import StatusError
+from agenshindot.database.model.id_and_cookie import (
     ID,
     IDOrm,
     Cookie,

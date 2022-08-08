@@ -22,13 +22,13 @@ from graia.ariadne.message.parser.twilight import (
     WildcardMatch,
 )
 
-from ..config import load_config
-from ..utils import cookie_str_to_mapping
-from ..database.engine import Database, get_db
-from ..utils.mihoyo_bbs.request import StatusError
-from ..utils.mihoyo_bbs.base import get_server, get_account
-from ..database.model.id_and_cookie import ID, IDOrm, CookieOrm
-from ..utils.mihoyo_bbs.model.base import (
+from agenshindot.config import load_config
+from agenshindot.utils import cookie_str_to_mapping
+from agenshindot.database.engine import Database, get_db
+from agenshindot.utils.mihoyo_bbs.request import StatusError
+from agenshindot.utils.mihoyo_bbs.base import get_server, get_account
+from agenshindot.database.model.id_and_cookie import ID, IDOrm, CookieOrm
+from agenshindot.utils.mihoyo_bbs.model.base import (
     CNAccount,
     OSAccount,
     CNAccounts,
