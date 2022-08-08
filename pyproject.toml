@@ -19,7 +19,7 @@ aiosqlite = "^0.17.0"
 Pillow = "^9.2.0"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^5.0.3"
+flake8 = "^5.0.4"
 black = "^22.6.0"
 isort = "^5.10.1"
 pre-commit = "^2.20.0"
