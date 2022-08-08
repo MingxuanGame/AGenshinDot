@@ -1,8 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
-from sqlalchemy.orm import backref, relationship
-from sqlalchemy import Text, Column, Integer, ForeignKey, SmallInteger
+from sqlalchemy import Text, Column, Integer, SmallInteger
 
 from ..engine import Base
 

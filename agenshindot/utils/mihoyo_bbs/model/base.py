@@ -2,8 +2,9 @@ from typing import List
 
 from pydantic import Field, BaseModel
 
+# === Base Info === #
 
-### Base Info ###
+
 class Role(BaseModel):
     avatar_url: str = Field(..., alias="AvatarUrl")
     nickname: str
@@ -83,7 +84,7 @@ class Info(BaseModel):
     homes: List[Home]
 
 
-### Account Info ###
+# === Account Info === #
 
 
 class CNAccount(BaseModel):

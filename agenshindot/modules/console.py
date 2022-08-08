@@ -3,7 +3,7 @@ from sqlite3 import Warning as SqliteWarning
 
 from loguru import logger
 from rich.table import Table
-from graia.saya import Saya, Channel
+from graia.saya import Channel
 from graia.ariadne.app import Ariadne
 from sqlalchemy.exc import DatabaseError
 from graia.ariadne.console import Console
