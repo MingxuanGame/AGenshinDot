@@ -1,5 +1,14 @@
 # AGenshinDot
 
+[![PyPI](https://img.shields.io/pypi/v/agenshindot?style=flat-square)](https://pypi.org/project/agenshindot)
+[![Python Version](https://img.shields.io/pypi/pyversions/agenshindot?style=flat-square)](https://pypi.org/project/agenshindot)
+[![License](https://img.shields.io/github/license/MingxuanGame/AGenshinDot?style=flat-square)](https://github.com/MingxuanGame/AGenshinDot/blob/master/LICENSE)
+[![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-929275476-success?style=flat-square)](https://jq.qq.com/?_wv=1027&k=C7XY04F1)
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/MingxuanGame/AGenshinDot/master.svg)](https://results.pre-commit.ci/latest/github/MingxuanGame/AGenshinDot/master)
+
 AGenshinDot 是 [GenshinDot](https://github.com/MingxuanGame/GenshinDot) 的 Python 实现，由 [Graia-Ariadne](https://github.com/GraiaProject/Ariadne) 驱动.
 
 ## 声明
@@ -12,9 +21,27 @@ AGenshinDot 项目及作者不对因使用本项目所造成的损失进行赔�
 
 ## 安装
 
-使用 Poetry 安装.
+### 从 PyPI 安装
 
 ```bash
+pip install agenshindot
+# or
+poetry add agenshindot
+```
+
+### 从 GitHub 安装
+
+1.直接安装
+
+```bash
+poetry add git+https://github.com/MingxuanGame/AGenshinDot.git
+```
+
+2.克隆后安装
+
+```bash
+git clone https://github.com/MingxuanGame/AGenshinDot.git
+cd AGenshinDot
 poetry install --no-dev
 ```
 
