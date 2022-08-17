@@ -206,7 +206,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "graia-amnesia"
-version = "0.5.4"
+version = "0.5.8"
 description = "a collection of shared components for graia"
 category = "main"
 optional = false
@@ -216,6 +216,7 @@ python-versions = ">=3.8,<4.0"
 launart = ">=0.3.3"
 loguru = ">=0.6.0,<1.0.0"
 statv = ">=0.2.2"
+typing-extensions = ">=4.0.0"
 yarl = ">=1.7.2,<2.0.0"
 
 [package.extras]
@@ -228,23 +229,23 @@ uvicorn = ["uvicorn (>=0.17.6,<1.0.0)"]
 
 [[package]]
 name = "graia-ariadne"
-version = "0.8.2"
+version = "0.8.3"
 description = "Another elegant Python QQ Bot framework for mirai and mirai-api-http v2."
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
-aiohttp = ">=3.7,<4.0"
-creart-graia = ">=0.1.4,<1.0.0"
-graia-amnesia = ">=0.5.2,<0.6.0"
+aiohttp = ">=3.8,<4.0"
+creart-graia = ">=0.1.5,<1.0.0"
+graia-amnesia = ">=0.5.5,<1.0"
 graia-broadcast = ">=0.18,<1.0"
 graia-saya = {version = ">=0.0,<1.0", optional = true, markers = "extra == \"standard\""}
 graia-scheduler = {version = ">=0.0,<1.0", optional = true, markers = "extra == \"standard\""}
 launart = ">=0.6.0,<1.0.0"
-pydantic = ">=1.8,<2.0"
+pydantic = ">=1.9,<2.0"
 richuru = {version = ">=0.1,<1.0", optional = true, markers = "extra == \"standard\""}
-typing-extensions = ">=4.0,<5.0"
+typing-extensions = ">=4.3,<5.0"
 
 [package.extras]
 alconna = ["arclet-alconna-graia"]
@@ -670,7 +671,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ea9030229c70c567f4061d63fcd9c86b930ceba3e6afaf6e1d542d57e0147b20"
+content-hash = "52f47a5f7f56c749f0720ed3937591109e3e2d0c4da0ea93a00cdc4ab414201c"
 
 [metadata.files]
 aiohttp = [
@@ -894,12 +895,12 @@ frozenlist = [
     {file = "frozenlist-1.3.0.tar.gz", hash = "sha256:ce6f2ba0edb7b0c1d8976565298ad2deba6f8064d2bebb6ffce2ca896eb35b0b"},
 ]
 graia-amnesia = [
-    {file = "graia-amnesia-0.5.4.tar.gz", hash = "sha256:e4515f72b3e16bd958b48271d5d89a2994bd891ca74fa0266cad9dc5e6a45dbb"},
-    {file = "graia_amnesia-0.5.4-py3-none-any.whl", hash = "sha256:8fe6e3c4d21bdde326e7569a99bfb5818dfbf0d79fa4da7a66ba29a84989297f"},
+    {file = "graia-amnesia-0.5.8.tar.gz", hash = "sha256:6dfb4fbff8e1c4b19ce8946d4e570342f334c294cea8134d1b536c9904d7d129"},
+    {file = "graia_amnesia-0.5.8-py3-none-any.whl", hash = "sha256:75f433a55f0b139782c77fa8f91413a933685a057cdab5646386144e6b68665d"},
 ]
 graia-ariadne = [
-    {file = "graia-ariadne-0.8.2.tar.gz", hash = "sha256:ea955ec4637d938172f809ee7ed7ee5c8b641bc355720ed65c54a8e8d3430dbe"},
-    {file = "graia_ariadne-0.8.2-py3-none-any.whl", hash = "sha256:1b692144c08005d53e904302bdcc884f592a6749e2a87637454682a9c7c1fc1a"},
+    {file = "graia-ariadne-0.8.3.tar.gz", hash = "sha256:edac7c5a10509f1e32d03d454b4e948915f3f17dde1aceaf9d92ebaecb469e2d"},
+    {file = "graia_ariadne-0.8.3-py3-none-any.whl", hash = "sha256:b83e093ffeab82f76df2d502d258c1ddf010580b756eed0a142e7939f704d006"},
 ]
 graia-broadcast = [
     {file = "graia-broadcast-0.18.2.tar.gz", hash = "sha256:07b0285d417021c795c3c4f4f12713311fcdec10d63f8e7a8ed7964e2f1b7a5a"},
