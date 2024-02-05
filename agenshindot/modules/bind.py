@@ -202,7 +202,9 @@ async def friend_handler(
                     ).wait(timeout=60, default=(0, False))
                     if not result[1]:
                         await app.send_friend_message(
-                            friend, "警告：选择超时或输入无效，已选择默认项", quote=source
+                            friend,
+                            "警告：选择超时或输入无效，已选择默认项",
+                            quote=source,
                         )
                     index = result[0]
                 await bind_cookie(
@@ -217,7 +219,9 @@ async def friend_handler(
                 )
             except ClientConnectorError as e:
                 await app.send_friend_message(
-                    friend, f"E: 无法访问 米游社 API - {e.strerror}", quote=source
+                    friend,
+                    f"E: 无法访问 米游社 API - {e.strerror}",
+                    quote=source,
                 )
             except ClientResponseError as e:
                 await app.send_friend_message(
@@ -276,7 +280,11 @@ async def bind_cookie(
     )
     await app.send_friend_message(
         friend,
-        ("Cookie 绑定成功！\n" if is_insert else "Cookie 曾绑定过，本次绑定已覆盖\n")
+        (
+            "Cookie 绑定成功！\n"
+            if is_insert
+            else "Cookie 曾绑定过，本次绑定已覆盖\n"
+        )
         + msg
         + ("（Cookie 为国际服 Cookie）" if is_os else ""),
         quote=source,
@@ -292,7 +300,9 @@ async def bind_uid_or_mihoyo_id_chat(
     arg: ForceResult,
 ):
     if not arg.result.display.isdigit():
-        await app.send_message(target, "E: UID/米游社通行证需为数字，请检查输入", quote=source)
+        await app.send_message(
+            target, "E: UID/米游社通行证需为数字，请检查输入", quote=source
+        )
         return
     id_ = int(arg.result.display)
     await app.send_message(
