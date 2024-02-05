@@ -30,7 +30,9 @@ from agenshindot.database.model.id_and_cookie import (
 )
 
 channel = Channel.current()
-channel.name("bind").author("MingxuanGame").description("原神 校验 Cookie 是否可用")
+channel.name("bind").author("MingxuanGame").description(
+    "原神 校验 Cookie 是否可用"
+)
 VALID_TEMPLATE = "UID {uid} 的 Cookie 可用"
 INVALID_TEMPLATE = "UID {uid} 的 Cookie 已失效"
 UNKNOWN_TEMPLATE = "UID {uid} 的 Cookie 状态未知 - {e}"
@@ -70,7 +72,9 @@ async def handler(
 ):
     db = get_db()
     if not db:
-        await app.send_message(event, "E: 数据库未开启，请联系机器人管理员", quote=source)
+        await app.send_message(
+            event, "E: 数据库未开启，请联系机器人管理员", quote=source
+        )
         return
     await check_cookie(app, db, event)
 

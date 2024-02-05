@@ -33,31 +33,41 @@ async def handler(
         if not uid:
             return
         if member.id not in ADMINS:
-            await app.send_message(group, "你不是机器人管理员，无权操作", quote=source)
+            await app.send_message(
+                group, "你不是机器人管理员，无权操作", quote=source
+            )
             return
         db = get_db()
         user = uid[0]
         if not db:
-            await app.send_message(group, "E: 数据库未开启，请联系机器人管理员", quote=source)
+            await app.send_message(
+                group, "E: 数据库未开启，请联系机器人管理员", quote=source
+            )
             return
         uid = await db.select(IDOrm, user.target)
         if not uid:
             await app.send_message(
-                group, MessageChain("未找到", user, "的 UID 信息"), quote=source
+                group,
+                MessageChain("未找到", user, "的 UID 信息"),
+                quote=source,
             )
 
             return
         id_ = ID.from_orm(uid).uid
         if not id_:
             await app.send_message(
-                group, MessageChain("未找到", user, "的 UID 信息"), quote=source
+                group,
+                MessageChain("未找到", user, "的 UID 信息"),
+                quote=source,
             )
 
             return
         uid = id_
     db = get_db()
     if not db:
-        await app.send_message(group, "E: 数据库未开启，请联系机器人管理员", quote=source)
+        await app.send_message(
+            group, "E: 数据库未开启，请联系机器人管理员", quote=source
+        )
         return
     if uid == 0:
         uid_db = await db.select(IDOrm, member.id)
